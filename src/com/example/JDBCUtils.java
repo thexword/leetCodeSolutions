@@ -13,7 +13,8 @@ public class JDBCUtils {
         }
     }
 
-    public static Connection getConnection(String url) throws SQLException {
+    public static Connection getConnection(String url, String user, String password)
+            throws SQLException {
         return DriverManager.getConnection(
                 url,
                 "root",

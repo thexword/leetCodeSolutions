@@ -2,18 +2,26 @@ package com.example;
 
 import org.junit.Test;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class TestClass {
     @Test
     public void testJDBC() {
+        ResourceBundle resource = ResourceBundle.getBundle("jdbc");
+        String url = "jdbc:mysql://localhost/testdb";
+        String user = resource.getString("user");
+        String password = resource.getString("password");
+
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            connection = JDBCUtils.getConnection(
-                    "jdbc:mysql://localhost/testdb");
+            connection = JDBCUtils.getConnection(url, user, password);
             String sql = "select * from t_student";
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
