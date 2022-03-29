@@ -17,7 +17,7 @@ public class JDBCUtils {
             throws SQLException {
         return DriverManager.getConnection(
                 url,
-                "root",
-                "246800");
+                user,
+                password);
     }
 }
