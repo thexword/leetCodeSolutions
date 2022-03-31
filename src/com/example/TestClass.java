@@ -65,4 +65,19 @@ public class TestClass {
             }
         }
     }
+
+    @Test
+    public void testBinarySearch2() {
+        BinarySearch2 binarySearch2 = new BinarySearch2();
+
+        int[] nums = new int[] {
+                5, 7, 7, 8, 8, 10
+        };
+        int target = 6;
+
+        int[] res = binarySearch2.searchRange(nums, target);
+        for (int re : res) {
+            System.out.println(re + ", ");
+        }
+    }
 }
