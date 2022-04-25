@@ -80,4 +80,22 @@ public class TestClass {
             System.out.println(re + ", ");
         }
     }
+
+    @Test
+    public void testIsBipartite() {
+        int[][] graph = new int[][] {
+                {1,3},
+                {0,2},
+                {1,3},
+                {0,2}
+        };
+
+        int[][] graph1 = new int[][] {
+                {1,2},
+                {0,2},
+                {1, 0},
+        };
+
+        System.out.println(new IsBipartite().isBipartite(graph));
+    }
 }
