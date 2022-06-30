@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.concurrent.*;
 
 public class TestClass {
     @Test
@@ -97,5 +98,41 @@ public class TestClass {
         };
 
         System.out.println(new IsBipartite().isBipartite(graph));
+    }
+
+    @Test
+    public void testThreadPoolExecutor() throws ExecutionException, InterruptedException {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3,
+                5, 1000, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(5));
+
+        threadPoolExecutor.execute(()->{
+            System.out.println(1);
+        });
+
+        Future<?> submit = threadPoolExecutor.submit(() -> {
+            System.out.println(2);
+            return 3;
+        });
+
+        System.out.println(submit.get());
+
+        threadPoolExecutor.shutdown();
+    }
+
+    @Test
+    public void testCallable() {
+        FutureTask<String> futureTask = new FutureTask<>(()->{
+            return "test";
+        });
+
+        new Thread(futureTask).start();
+
+        try {
+            System.out.println(futureTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
