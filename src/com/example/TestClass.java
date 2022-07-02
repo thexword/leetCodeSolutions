@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestClass {
     @Test
@@ -134,5 +135,14 @@ public class TestClass {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testAtomic() {
+        AtomicInteger atomicInteger = new AtomicInteger(1);
+        System.out.println(atomicInteger.get());
+        System.out.println(atomicInteger.compareAndSet(1, 2));
+        System.out.println(atomicInteger.compareAndSet(1, 3));
+        System.out.println(atomicInteger.get());
     }
 }
