@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
@@ -150,5 +151,10 @@ public class TestClass {
         AtomicIntegerArray atomicIntegerArray = new AtomicIntegerArray(new int[] {1, 2});
         System.out.println(atomicIntegerArray.getAndAdd(0, 1));
         System.out.println(atomicIntegerArray.get(0));
+
+        AtomicBoolean atomicBoolean = new AtomicBoolean();
+        System.out.println(atomicBoolean);
+        atomicBoolean.set(true);
+        System.out.println(atomicBoolean);
     }
 }
