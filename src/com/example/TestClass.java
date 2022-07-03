@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public class TestClass {
     @Test
@@ -144,5 +145,10 @@ public class TestClass {
         System.out.println(atomicInteger.compareAndSet(1, 2));
         System.out.println(atomicInteger.compareAndSet(1, 3));
         System.out.println(atomicInteger.get());
+
+        System.out.println("-----");
+        AtomicIntegerArray atomicIntegerArray = new AtomicIntegerArray(new int[] {1, 2});
+        System.out.println(atomicIntegerArray.getAndAdd(0, 1));
+        System.out.println(atomicIntegerArray.get(0));
     }
 }
