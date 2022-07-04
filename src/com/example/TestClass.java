@@ -11,6 +11,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TestClass {
     @Test
@@ -152,9 +153,38 @@ public class TestClass {
         System.out.println(atomicIntegerArray.getAndAdd(0, 1));
         System.out.println(atomicIntegerArray.get(0));
 
+        System.out.println("-----");
         AtomicBoolean atomicBoolean = new AtomicBoolean();
         System.out.println(atomicBoolean);
         atomicBoolean.set(true);
         System.out.println(atomicBoolean);
+
+        System.out.println("-----");
+        AtomicReference<Person> objectAtomicReference = new AtomicReference<>();
+        Person tom = new Person("tom", 16);
+        objectAtomicReference.set(tom);
+        System.out.println(objectAtomicReference.get());
+
+        Person alice = new Person("alice", 15);
+        objectAtomicReference.compareAndSet(tom, alice);
+        System.out.println(objectAtomicReference.get());
+    }
+
+    static class Person {
+        String name;
+        int age;
+
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        @Override
+        public String toString() {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", age=" + age +
+                    '}';
+        }
     }
 }
