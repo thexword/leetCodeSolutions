@@ -8,10 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
 public class TestClass {
     @Test
@@ -168,11 +165,17 @@ public class TestClass {
         Person alice = new Person("alice", 15);
         objectAtomicReference.compareAndSet(tom, alice);
         System.out.println(objectAtomicReference.get());
+
+        System.out.println("-----");
+        AtomicIntegerFieldUpdater<Person> age = AtomicIntegerFieldUpdater.newUpdater(Person.class, "age");
+        System.out.println(age.get(tom));
+        System.out.println(age.getAndIncrement(tom));
+        System.out.println(age.get(tom));
     }
 
     static class Person {
         String name;
-        int age;
+        volatile int age;
 
         public Person(String name, int age) {
             this.name = name;
