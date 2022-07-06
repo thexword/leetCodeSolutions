@@ -255,20 +255,45 @@ public class TestClass {
 
     @Test
     public void testCyclicBarrier() {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+                5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+
         CyclicBarrier cyclicBarrier = new CyclicBarrier(5);
 
+        for (int i = 0; i < 10; i++) {
+            int threadNum = i;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            threadPoolExecutor.execute(() -> {
+                try {
+                    System.out.println("threadNum:" + threadNum + " is ready");
+                    // 等待60秒，保证子线程完全执行结束
+                    cyclicBarrier.await(60, TimeUnit.SECONDS);
+                    System.out.println("threadNum:" + threadNum + " is finish");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException | TimeoutException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
         try {
-            cyclicBarrier.await();
+            Thread.sleep(100 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (BrokenBarrierException e) {
-            e.printStackTrace();
         }
+
+        threadPoolExecutor.shutdown();
     }
 
     @Test
-    public void test() {
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+    public void testReentrantLock() {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+                5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
 
         ReentrantLock reentrantLock = new ReentrantLock();
         Condition condition = reentrantLock.newCondition();
