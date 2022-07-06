@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TestClass {
     @Test
@@ -189,5 +191,123 @@ public class TestClass {
                     ", age=" + age +
                     '}';
         }
+    }
+    
+    @Test
+    public void testSemaphore() {
+//        AbstractQueuedSynchronizer
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+        Semaphore semaphore = new Semaphore(5, true);
+
+        for (int i = 0; i < 50; ++i) {
+            int threadNum = i;
+            threadPoolExecutor.execute(()->{
+                try {
+                    semaphore.acquire();
+                    Thread.sleep(1000);
+                    System.out.println("Thread: "+ threadNum + ", " + Thread.currentThread().getName());
+                    Thread.sleep(1000);
+                    semaphore.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        threadPoolExecutor.shutdown();
+    }
+
+    @Test
+    public void testCountDownLatch() {
+        CountDownLatch countDownLatch = new CountDownLatch(5);
+
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+
+        for (int i = 0; i < 5; i++) {
+            threadPoolExecutor.execute(() -> {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(Thread.currentThread().getName());
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        threadPoolExecutor.shutdown();
+        System.out.println("finish");
+    }
+
+    @Test
+    public void testCyclicBarrier() {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5);
+
+        try {
+            cyclicBarrier.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test() {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+
+        ReentrantLock reentrantLock = new ReentrantLock();
+        Condition condition = reentrantLock.newCondition();
+
+        threadPoolExecutor.execute(() -> {
+            try {
+                reentrantLock.lock();
+
+                System.out.println("await时间为：" + System.currentTimeMillis());
+                condition.await();
+                System.out.println("await等待结束");
+
+            } catch (Exception e) {
+
+            } finally {
+                reentrantLock.unlock();
+            }
+        });
+
+        threadPoolExecutor.execute(() -> {
+            try {
+                reentrantLock.lock();
+
+                Thread.sleep(2000);
+                System.out.println("signal时间为：" + System.currentTimeMillis());
+                condition.signal();
+            } catch (Exception e) {
+
+            } finally {
+                reentrantLock.unlock();
+            }
+        });
+
+        try {
+            Thread.sleep(100*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        threadPoolExecutor.shutdown();
     }
 }
