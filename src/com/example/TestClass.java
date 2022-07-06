@@ -258,7 +258,9 @@ public class TestClass {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
 
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5, () -> {
+            System.out.println("------当线程数达到之后，优先执行------");
+        });
 
         for (int i = 0; i < 10; i++) {
             int threadNum = i;
@@ -334,5 +336,13 @@ public class TestClass {
         }
 
         threadPoolExecutor.shutdown();
+
+//        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+//        ReentrantReadWriteLock.ReadLock readLock = reentrantReadWriteLock.readLock();
+//        readLock.lock();
+//        readLock.unlock();
+//        ReentrantReadWriteLock.WriteLock writeLock = reentrantReadWriteLock.writeLock();
+//        writeLock.lock();
+//        writeLock.unlock();
     }
 }
