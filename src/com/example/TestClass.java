@@ -197,7 +197,7 @@ public class TestClass {
     public void testSemaphore() {
 //        AbstractQueuedSynchronizer
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
-        Semaphore semaphore = new Semaphore(5, true);
+        Semaphore semaphore = new Semaphore(5, true); // 默认为false，非公平锁
 
         for (int i = 0; i < 50; ++i) {
             int threadNum = i;
@@ -297,7 +297,7 @@ public class TestClass {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 5, 100, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
 
-        ReentrantLock reentrantLock = new ReentrantLock();
+        ReentrantLock reentrantLock = new ReentrantLock(true); // 默认为false，非公平锁
         Condition condition = reentrantLock.newCondition();
 
         threadPoolExecutor.execute(() -> {
