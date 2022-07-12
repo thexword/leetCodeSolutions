@@ -345,4 +345,32 @@ public class TestClass {
 //        writeLock.lock();
 //        writeLock.unlock();
     }
+
+    @Test
+    public void testConstantPool() {
+        Integer i = 10;
+        Integer j = new Integer(10); // false
+        System.out.println(i == j);
+
+        System.out.println("-----");
+        String s1 = "test";
+        String s2 = "test";
+        String s3 = new String("test");
+        String s4 = "te" + "st";
+        String temp1 = "te";
+        String temp2 = "st";
+        String s5 = temp1 + temp2;
+        System.out.println(s1 == s2); // true
+        System.out.println(s1 == s3); // false
+        System.out.println(s1 == s4); // true
+        System.out.println(s3 == s4); // false
+        System.out.println(s4 == s5); // false
+
+        System.out.println("-----");
+        System.out.println(s1.hashCode());
+        System.out.println(s2.hashCode());
+        System.out.println(s3.hashCode());
+        System.out.println(s4.hashCode());
+        System.out.println(s5.hashCode()); // The hashcode is same
+    }
 }
