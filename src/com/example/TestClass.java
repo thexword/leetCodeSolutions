@@ -348,11 +348,6 @@ public class TestClass {
 
     @Test
     public void testConstantPool() {
-        Integer i = 10;
-        Integer j = new Integer(10); // false
-        System.out.println(i == j);
-
-        System.out.println("-----");
         String s1 = "test";
         String s2 = "test";
         String s3 = new String("test");
@@ -362,9 +357,9 @@ public class TestClass {
         String s5 = temp1 + temp2;
         System.out.println(s1 == s2); // true
         System.out.println(s1 == s3); // false
-        System.out.println(s1 == s4); // true
+        System.out.println(s1 == s4); // true （注意s4和s1相等）
         System.out.println(s3 == s4); // false
-        System.out.println(s4 == s5); // false
+        System.out.println(s4 == s5); // false （注意s4和s5不等）
 
         System.out.println("-----");
         System.out.println(s1.hashCode());
@@ -372,5 +367,20 @@ public class TestClass {
         System.out.println(s3.hashCode());
         System.out.println(s4.hashCode());
         System.out.println(s5.hashCode()); // The hashcode is same
+
+        System.out.println("-----");
+        Integer i1 = 40;
+        Integer i2 = 40;
+        Integer i3 = 0;
+        Integer i4 = new Integer(40);
+        Integer i5 = new Integer(40);
+        Integer i6 = new Integer(0);
+        System.out.println("i1=i2 " + (i1 == i2)); // true
+        System.out.println("i1=i2+i3 " + (i1 == i2 + i3)); // true
+        System.out.println("i1=i4 " + (i1 == i4)); // false
+        System.out.println("i4=i5 " + (i4 == i5)); // false
+        System.out.println("i4=i5+i6 " + (i4 == i5 + i6)); // true (首先 i5 和 i6 进行自动拆箱操作，
+        // 进行数值相加，即 i4 == 40。然后 Integer 对象无法与数值进行直接比较，所以 i4 自动拆箱转为 int 值 40，最终这条语句转为 40 == 40 进行数值比较。)
+        System.out.println("40=i5+i6 " + (40 == i5 + i6)); // true (加法运算会自动拆箱)
     }
 }
