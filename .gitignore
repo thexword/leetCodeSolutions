@@ -1,2 +1,7 @@
 out/
 src/jdbc.properties
+.DS_Store
+.idea/dataSources.local.xml
+.idea/dataSources/
+src/.DS_Store
+src/com/.DS_Store
